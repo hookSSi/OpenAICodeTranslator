@@ -13,3 +13,7 @@ To use the code, you'll need to adjust the settings in settings.py to set the in
 You'll also need to provide a valid OpenAI API key for the ChatGPTAPIkey variable in settings.py.
 
 Drop code files in the input folder, and the translated versions will be created in the output folder.
+
+# Contribute
+
+I made this for my own personal use and didn't give it much thought, but feel free to PR!
