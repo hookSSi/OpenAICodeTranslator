@@ -26,12 +26,16 @@ class CodeTranslator:
 
         {target_language} code (no \\\\\\):
         '''
+        
+        try:
+            completions = openai.ChatCompletion.create(
+                model=self.model,
+                messages=[{'role': 'system', 'content': f'{prompt}'}],
+                temperature=0,
+            )
 
-        completions = openai.ChatCompletion.create(
-            model=self.model,
-            messages=[{'role': 'system', 'content': f'{prompt}'}],
-            temperature=0,
-        )
-
-        message = completions.choices[0].message.content
-        return message.strip()
+            message = completions.choices[0].message.content
+            return message.strip()
+        except: 
+            print('token length error')
+            return 'token length error, reduce code length'

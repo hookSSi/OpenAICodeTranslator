@@ -9,7 +9,7 @@ import storagehelper as sh
 from settings import *
 import inquirer
 import os
-import glob
+import progressbar
 
 
 class Main:
@@ -25,9 +25,16 @@ class Main:
         inputstorage = sh.Storage(INPUT_FOLDER)
 
         files = inputstorage.list_files(answers['source_language'])
-        for file in files:
+        files = list(files)
+        
+        bar = progressbar.ProgressBar(maxval=len(files)).start()
+        for i, file in enumerate(files, start=0):
+            # To continue from where you stopped
+            if os.path.exists(file.replace(INPUT_FOLDER, OUTPUT_FOLDER)):
+                continue
+                
+            bar.update(i)
             if os.path.isfile(file):
-                print(f"Processing target source: {file}")
                 content = inputstorage.read_file(file)
 
                 # use ChatGPT to convert te file
@@ -39,7 +46,7 @@ class Main:
                 # write to the output folder
                 translated_file = translated_file.replace(INPUT_FOLDER, OUTPUT_FOLDER)
                 outputstorage.write_file(translated_file, translated_code)
-                print(f"{translated_file} generated")
+        bar.finish()
 
 
 if __name__ == '__main__':
